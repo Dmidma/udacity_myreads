@@ -19,6 +19,7 @@ class SearchBooks extends React.Component {
         }
         search(query).then(d => {
           if (d instanceof Array && d.length !== 0) {
+              console.log("Data", d)
               this.setState({ searchedBooks:  d })
           } else {
               this.setState({ searchedBooks: [] })

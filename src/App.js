@@ -19,6 +19,9 @@ class BooksApp extends React.Component {
   }
 
   createMainPage() {
+    const currentlyReadingBooks = []
+    const wantToReadBooks = []
+    const readBooks = []
     return (
           <div className="list-books">
             <div className="list-books-title">
