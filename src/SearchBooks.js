@@ -20,12 +20,13 @@ class SearchBooks extends React.Component {
         search(query).then(d => {
           if (d instanceof Array && d.length !== 0) {
               this.setState({ searchedBooks:  d })
+          } else {
+              this.setState({ searchedBooks: [] })
           }
         })
     }
     render() {
       const { query, searchedBooks } = this.state
-          console.log("In Render", searchedBooks)
       return (
               <div className="search-books">
               <div className="search-books-bar">

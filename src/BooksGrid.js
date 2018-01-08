@@ -10,7 +10,7 @@ class BooksGrid extends React.Component {
         return (
                 <ol className="books-grid">
                     {books.map((book) => (
-                      <li>
+                      <li key={book.id}>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
@@ -25,7 +25,7 @@ class BooksGrid extends React.Component {
                             </div>
                           </div>
                           <div className="book-title">{book.title}</div>
-                          <div className="book-authors">Terma:</div>
+                          <div className="book-authors">{book.authors}</div>
                         </div>
                       </li>
                     ))} 
