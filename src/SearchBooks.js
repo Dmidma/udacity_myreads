@@ -1,29 +1,31 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
 import { search } from './BooksAPI'
+import BooksGrid from './BooksGrid' 
 
 class SearchBooks extends React.Component {
     state = {
         query: '',
+        searchedBooks: []
     }
     setQuery = (query) => {
         this.setState({ query })
-        
+        this.searchBooksFromApi(query)
     }
     searchBooksFromApi = (query) => {
-        // let booksToReturn = []
+        if (!query) {
+            this.setState({ searchedBooks: [] })   
+            return
+        }
         search(query).then(d => {
           if (d instanceof Array && d.length !== 0) {
-              console.log(d)
+              this.setState({ searchedBooks:  d })
           }
         })
     }
     render() {
-      const { query } = this.state
-      if (query) {
-          this.searchBooksFromApi(query)
-      } 
+      const { query, searchedBooks } = this.state
+          console.log("In Render", searchedBooks)
       return (
               <div className="search-books">
               <div className="search-books-bar">
@@ -46,7 +48,9 @@ class SearchBooks extends React.Component {
               </div>
               </div>
               <div className="search-books-results">
-              <ol className="books-grid"></ol>
+                  <ol className="books-grid">
+                    <BooksGrid books={searchedBooks} />
+                  </ol>
               </div>
               </div>
               )
