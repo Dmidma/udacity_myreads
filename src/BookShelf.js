@@ -8,12 +8,14 @@ class BookShelf extends React.Component {
         books: PropTypes.array.isRequired
     }
     render() {
-        <div className="bookshelf">
-          <h2 className="bookshelf-title">{this.props.shelfTitle}</h2>
-          <div className="bookshelf-books">
-            <BooksGrid books={this.props.books} />
-          </div>
-        <div/>
+        return (
+            <div className="bookshelf">
+              <h2 className="bookshelf-title">{this.props.shelfTitle}</h2>
+              <div className="bookshelf-books">
+                <BooksGrid books={this.props.books} />
+              </div>
+            </div>
+        )
     }
 
 }
