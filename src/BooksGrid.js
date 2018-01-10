@@ -26,6 +26,9 @@ class BooksGrid extends React.Component {
         books.find(book => book.id === bookId).shelf = newBookShelf
 
         this.setState({ books })
+
+        if (this.props.hasChanged)
+            this.props.hasChanged()
     }
     getCurrentShelfOfBook(bookId) {
         return this.props.books.find(b => b.id === bookId).shelf

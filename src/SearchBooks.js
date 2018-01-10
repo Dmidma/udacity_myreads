@@ -56,7 +56,7 @@ class SearchBooks extends React.Component {
                   </div>
                   <div className="search-books-results">
                       <ol className="books-grid">
-                        <BooksGrid books={searchedBooks} changeBookToShelf={this.props.changeBookToShelf}  />
+                        <BooksGrid books={searchedBooks} changeBookToShelf={this.props.changeBookToShelf}  hasChanged={this.props.hasChanged} />
                       </ol>
                   </div>
               </div>

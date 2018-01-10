@@ -16,11 +16,17 @@ class BooksApp extends React.Component {
       return (
         <div className="app">
             <Route exact path="/" render={() => this.createMainPage() } />
-            <Route path="/search" render={({ history }) =>  <SearchBooks changeBookToShelf={this.updateBookShelf} existingBooks={this.state.books} /> } />
+            <Route path="/search" render={({ history }) =>  <SearchBooks changeBookToShelf={this.updateBookShelf} existingBooks={this.state.books} hasChanged={this.hasChanged.bind(this)}/> } />
         </div>
     )
   }
+  hasChanged() {
+   this.fetchAllBooksFromServer() 
+  }
   componentDidMount() {
+      this.fetchAllBooksFromServer()
+  }
+  fetchAllBooksFromServer() {
       const books = new Map()
       books.set('read', new Map())
       books.set('wantToRead', new Map())
@@ -30,7 +36,7 @@ class BooksApp extends React.Component {
           allBooks.forEach(aBook => books.get(aBook.shelf).set(aBook.id, aBook))
           this.setState({ books })
       })
-  } 
+  }
   getBooksFromShelf(shelf) {
       return (this.state.books.has(shelf))?
         [...this.state.books.get(shelf).values()] :
