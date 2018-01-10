@@ -10,51 +10,60 @@ import './App.css'
 
 class BooksApp extends React.Component {
   state = {
-      read: [],
-      currentlyReading: [],
-      wantToRead: []
+      books: new Map()
   }
   render() {
-      BooksAPI.get("bUybAgAAQBAJ").then(d => console.log(d))
       return (
         <div className="app">
             <Route exact path="/" render={() => this.createMainPage() } />
-            <Route path="/search" render={() =>  <SearchBooks /> } />
+            <Route path="/search" render={() =>  <SearchBooks changeBookToShelf={this.updateBookShelf} /> } />
         </div>
     )
   }
   componentDidMount() {
-      BooksAPI.getAll().then(books => {
-          let read = [], currentlyReading = [], wantToRead = []
-          books.forEach(book => {
-            switch (book.shelf) {
-                case "read":
-                    read.push(book)
-                    break
-                case "wantToRead":
-                    wantToRead.push(book)
-                    break
-                case "currentlyReading":
-                   currentlyReading.push(book)
-                   break 
-                default:
-            }      
-          })   
-          this.setState({ read, currentlyReading, wantToRead })
+      const books = new Map()
+      books.set('read', new Map())
+      books.set('wantToRead', new Map())
+      books.set('currentlyReading', new Map())
+    
+      BooksAPI.getAll().then(allBooks => {
+          allBooks.forEach(aBook => books.get(aBook.shelf).set(aBook.id, aBook))
+          this.setState({ books })
       })
   }
-  createMainPage() {
-    const { read, currentlyReading, wantToRead } = this.state
+  getBooksFromShelf(shelf) {
+      return (this.state.books.has(shelf))?
+        [...this.state.books.get(shelf).values()] :
+        []
+  }
+  changeBookToShelf(book, shelf) {
+    const books = this.state.books
+    if (shelf !== 'none' && !books.has(shelf))
+        return
+        
+    BooksAPI.update({id: book.id}, shelf).then(r => {
+        let theBook = books.get(book.shelf).get(book.id)
+        books.get(book.shelf).delete(book.id)
+        theBook.shelf = shelf;
+        if (shelf !== 'none')
+            books.get(shelf).set(book.id, theBook)
 
+        this.setState({ books })
+    })
+  }
+  updateBookShelf(book, shelf) {
+    BooksAPI.update(book, shelf)
+  }
+  createMainPage() {
     return (
           <div className="list-books">
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-              <BookShelf shelfTitle="Currently Reading" books={currentlyReading} />
-              <BookShelf shelfTitle="Want to Read" books={wantToRead} />
-              <BookShelf shelfTitle="Read" books={read} />
+              <BookShelf shelfTitle="Currently Reading" books={ this.getBooksFromShelf('currentlyReading') } changeBookToShelf={this.changeBookToShelf.bind(this)} />
+              <BookShelf shelfTitle="Want to Read" books={ this.getBooksFromShelf('wantToRead') } changeBookToShelf={this.changeBookToShelf.bind(this)} />
+              <BookShelf shelfTitle="Read" books={ this.getBooksFromShelf('read') } changeBookToShelf={this.changeBookToShelf.bind(this)} />
             </div>
             <div className="open-search">
               <Link to="/search">Add a book</Link>

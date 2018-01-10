@@ -19,7 +19,6 @@ class SearchBooks extends React.Component {
         }
         search(query).then(d => {
           if (d instanceof Array && d.length !== 0) {
-              console.log("Data", d)
               this.setState({ searchedBooks:  d })
           } else {
               this.setState({ searchedBooks: [] })
@@ -51,7 +50,7 @@ class SearchBooks extends React.Component {
                   </div>
                   <div className="search-books-results">
                       <ol className="books-grid">
-                        <BooksGrid books={searchedBooks} />
+                        <BooksGrid books={searchedBooks} changeBookToShelf={this.props.changeBookToShelf}  />
                       </ol>
                   </div>
               </div>
