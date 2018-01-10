@@ -14,6 +14,9 @@ class BooksGrid extends React.Component {
     getCurrentShelfOfBook(bookId) {
         return this.props.books.find(b => b.id === bookId).shelf
     }
+    getShelfOfBook(book) {
+        return (book.shelf)? book.shelf : 'none'
+    }
     render() {
         const { books } = this.props
         return (
@@ -24,7 +27,7 @@ class BooksGrid extends React.Component {
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
                             <div className="book-shelf-changer">
-                              <select name={book.id} onChange={this.change} value={book.shelf} >
+                              <select name={book.id} onChange={this.change} value={this.getShelfOfBook(book) } >
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>

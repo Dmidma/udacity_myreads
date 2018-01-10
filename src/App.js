@@ -16,7 +16,7 @@ class BooksApp extends React.Component {
       return (
         <div className="app">
             <Route exact path="/" render={() => this.createMainPage() } />
-            <Route path="/search" render={() =>  <SearchBooks changeBookToShelf={this.updateBookShelf} /> } />
+            <Route path="/search" render={({ history }) =>  <SearchBooks changeBookToShelf={this.updateBookShelf} existingBooks={this.state.books} /> } />
         </div>
     )
   }
@@ -30,6 +30,10 @@ class BooksApp extends React.Component {
           allBooks.forEach(aBook => books.get(aBook.shelf).set(aBook.id, aBook))
           this.setState({ books })
       })
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+      console.log("here")
+          return true
   }
   getBooksFromShelf(shelf) {
       return (this.state.books.has(shelf))?
