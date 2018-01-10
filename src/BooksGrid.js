@@ -3,13 +3,29 @@ import PropTypes from 'prop-types'
 
 class BooksGrid extends React.Component {
     static propTypes = {
-        books: PropTypes.array.isRequired
+        books: PropTypes.array.isRequired,
+        changeBookToShelf: PropTypes.func.isRequired
+    }
+    state = {
+        books: []
+    }
+    componentDidMount() {
+        this.setState({ books: this.props.books })
     }
     change = (event) => {
-        if (!this.props.changeBookToShelf)
+        const bookId = event.target.name
+        const newBookShelf = event.target.value
+        const currentShelf = this.getCurrentShelfOfBook(event.target.name)
+        // do not proceed if the self is the same as the previous one
+        if (currentShelf === newBookShelf)
             return
+        
+        this.props.changeBookToShelf({id: bookId, shelf: currentShelf}, newBookShelf)
+        const books = this.props.books
 
-        this.props.changeBookToShelf({id: event.target.name, shelf: this.getCurrentShelfOfBook(event.target.name)}, event.target.value)
+        books.find(book => book.id === bookId).shelf = newBookShelf
+
+        this.setState({ books })
     }
     getCurrentShelfOfBook(bookId) {
         return this.props.books.find(b => b.id === bookId).shelf

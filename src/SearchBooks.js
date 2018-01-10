@@ -18,7 +18,6 @@ class SearchBooks extends React.Component {
             return
         }
         search(query).then(d => {
-          console.log(d)
           if (d instanceof Array && d.length !== 0) {
               d.forEach(currentBook => {
                 for (const shelf of this.props.existingBooks.keys()) { 

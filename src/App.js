@@ -30,11 +30,7 @@ class BooksApp extends React.Component {
           allBooks.forEach(aBook => books.get(aBook.shelf).set(aBook.id, aBook))
           this.setState({ books })
       })
-  }
-  shouldComponentUpdate(nextProps, nextState) {
-      console.log("here")
-          return true
-  }
+  } 
   getBooksFromShelf(shelf) {
       return (this.state.books.has(shelf))?
         [...this.state.books.get(shelf).values()] :
